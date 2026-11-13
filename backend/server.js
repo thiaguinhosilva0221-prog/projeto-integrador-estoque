@@ -9,8 +9,8 @@ app.get('/api/produtos/:id/fornecedores',(q,r)=>r.json(db.prepare('SELECT f.* FR
 app.get('/api/estoque-baixo', (req, res) => {
     const produtos = db.prepare(`
         SELECT * FROM produtos
-        WHERE estoque <= 5
-        ORDER BY estoque ASC
+        WHERE quantidade <= 5
+        ORDER BY quantidade ASC
     `).all();
 
     res.json(produtos);
@@ -21,8 +21,8 @@ app.get('/api/relatorio-estoque', (req, res) => {
     const relatorio = db.prepare(`
         SELECT
             COUNT(*) AS total_produtos,
-            COALESCE(SUM(estoque), 0) AS total_unidades,
-            COUNT(CASE WHEN estoque <= 5 THEN 1 END)
+            COALESCE(SUM(quantidade), 0) AS total_unidades,
+            COUNT(CASE WHEN quantidade <= 5 THEN 1 END)
                 AS produtos_estoque_baixo
         FROM produtos
     `).get();
